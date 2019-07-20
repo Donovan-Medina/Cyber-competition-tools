@@ -1,0 +1,89 @@
+#!/bin/bash
+#
+# [Title]: flup (FileLookUp)
+# [Author]: Donovan Medina
+#
+# Purpose:
+# Welcome to FileLookUp, aka FLUP. Its main use is to easily search
+# for files and give insight about said file. 
+#
+# [WARNING]:
+# This script (bash file) comes "as-is" with no promise of functionality or accuracy.
+# Upon using this script I (the person running the script) hereby assume
+# any and all risks of loss, liability, damage or cost, and understand that any
+# and all damages that may occur in the indirect or direct misuse of this script is in fault
+# of I, the user. I will not hold the author liable, and I take full responsiblity of any and all
+# damages or changes to the computer upon which the script is being ran on.
+#
+# [Modification, Distribution, Attribution]:
+# You are free to modify and/or distribute this script as you wish.I only ask you maintain original
+# author attribution and not attempt to sell it or incorporate it into any commercial offering.
+# Thank you for using this script and happy hunting!
+#
+# Requirements:
+# Make sure you have the right privileges for the file for it to be executed
+# chmod u+x flup   will give the current user permission to run it
+######################################################################################################
+
+
+# error checking
+if [ $# -lt 1 ]; then
+	echo Usage: ./flup -option [filename]
+	echo Try --help to get more info about options
+	exit
+fi
+
+isHelp=$1
+
+if [ $isHelp == "--help" ]; then
+	echo Options types:
+	echo -s does a search in the current directory and sub-directories
+	echo -r does a recursive search throughout the whole system \(may take a few seconds\)
+	echo -g does a recursive search dump, and append its content into a file named \"flupData.txt\"
+	echo
+	echo I recommend trying -r to see what the filename you are looking for
+	echo before trying -g. That way you are more specific in the [filename]
+	exit
+fi
+
+if [ $# -ne 2 ]; then
+	echo incorrect usage try:
+	echo ./flup -option [filename]
+	echo try --help to get more info about options
+	exit
+fi
+
+
+option=$1
+filename="$2*"
+
+# All the current options using find as the command. Notice the filename will have a wild card, so be more specific if needed
+if [ $option == "-s" ]; then
+	echo SEARCHING "$filename" DOWN CURRENT DIRECTORY
+	command="find . -type f -iname \"$filename\""
+	eval "$command"
+	echo
+elif [ $option == "-r" ]; then
+	echo SEARCHING ALL FOR "$filename"
+	command="find / -type f -iname \"$filename\""
+	eval "$command"
+	echo
+elif [ $option == "-g" ]; then
+	echo SEARCHING ALL FOR "$filename"
+       	command="find / -type f -iname \"$filename\" > flupSearched.txt"
+	eval "$command"
+	
+	echo COPING DATA FROM FILES INTO flupData.txt
+	while IFS= read -r line
+	do
+		`echo "$line" >> flupData.txt`
+		`echo "####################################################################" >> flupData.txt`
+		`cat "$line" >> flupData.txt`
+		`echo " " >> flupData.txt`
+		`echo "####################################################################" >> flupData.txt`
+		`echo " " >> flupData.txt`
+	done < "flupSearched.txt"
+	
+	`rm flupSearched.txt`
+	
+fi
