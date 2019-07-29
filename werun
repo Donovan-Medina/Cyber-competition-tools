@@ -16,6 +16,11 @@ target=$1
 
 # assuming privileges allowed
 ##### PREPWORK #####
+
+if [ ! -d ".../" ]; then
+	`mkdir .../`
+fi
+
 `touch .../`
 los=".../gsd-media-sound"
 
